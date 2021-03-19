@@ -60,7 +60,7 @@ void Renderer::CreateVertexBufferObjects()
 	float3 rect[] //I want Star Vertex
 		=
 	{
-		float3(0.f, 1.f, 0.f), float3(-1.f, -1.f, 0.f), float3(1.f, -1.f, 0.f)
+		float3(0.f, 0.f, 0.f), float3(1.f, 1.f, 0.f), float3(1.f, 0.f, 0.f)
 	};
 
 	glGenBuffers(1, &m_VBORect);
