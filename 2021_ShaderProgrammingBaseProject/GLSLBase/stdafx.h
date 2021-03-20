@@ -4,6 +4,8 @@
 
 #include <stdio.h>
 #include <tchar.h>
+#define VERTICES_TRIANGLE 3
+#define VERTICES_SQUARE 6
 
 struct float3
 {

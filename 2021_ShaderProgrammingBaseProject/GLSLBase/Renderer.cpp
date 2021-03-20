@@ -53,19 +53,30 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 
 	//Initialize model transform matrix :; used for rotating quad normal to parallel to camera direction
 	m_m4Model = glm::rotate(glm::mat4(1.0f), glm::radians(0.f), glm::vec3(1.f, 0.f, 0.f));
+
+	float3 rect[] = { float3(0.f, 0.f, 0.f), float3(1.f, 1.f, 0.f), float3(1.f, 0.f, 0.f) };
+
+	glGenBuffers(1, &m_VBOTri);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOTri);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(rect), rect, GL_STATIC_DRAW);
 }
 
 void Renderer::CreateVertexBufferObjects()
 {
-	float3 rect[] //I want Star Vertex
-		=
-	{
-		float3(0.f, 0.f, 0.f), float3(1.f, 1.f, 0.f), float3(1.f, 0.f, 0.f)
-	};
+	float3 rect[] = { 
+		float3(0.25f, 0.25f, 0.f), float3(-0.25f, -0.25f, 0.f), float3(0.25, -0.25, 0.f), 
+		float3(0.25f, 0.25f, 0.f), float3(-0.25f, -0.25f, 0.f), float3(-0.25f, 0.25f, 0.f) };
 
 	glGenBuffers(1, &m_VBORect);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBORect);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(rect), rect, GL_STATIC_DRAW);
+
+	//float3 rect2[] = { float3(1.f, 0.f, 0.f), float3(1.f, 1.f, 0.f), float3(0.f, 1.f, 0.f) };
+
+	//glGenBuffers(2, &m_VBORect);
+	//glBindBuffer(GL_ARRAY_BUFFER, m_VBORect);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(rect2), rect, GL_STATIC_DRAW);
+
 }
 
 void Renderer::AddShader(GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType)
@@ -300,10 +311,12 @@ void Renderer::Test()
 	int attribPosition = glGetAttribLocation(m_SolidRectShader, "a_Position");
 	glEnableVertexAttribArray(attribPosition);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBORect);
-	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
+
+	//
+	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(float3), 0);
 
 	// (Primitive Type, firstIndex, VertexCount)
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_TRIANGLES, 0, VERTICES_SQUARE);
 	
 	glDisableVertexAttribArray(attribPosition);
 }
