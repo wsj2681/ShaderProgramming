@@ -26,7 +26,7 @@ void main()
 	{
 		newTime = mod(newTime, a_LifeTime);
 		newPosition = newPosition + vec3(newTime, 0, 0);
-		newPosition.y = newPosition.y + a_Amp * sin(newTime * 3.14 * 2 * a_Period);
+		newPosition.y = newPosition.y + (a_Amp * newTime) * sin(newTime * 3.14 * 2 * a_Period);
 
 		//float t = newTime;
 		//float tt = newTime * newTime;
