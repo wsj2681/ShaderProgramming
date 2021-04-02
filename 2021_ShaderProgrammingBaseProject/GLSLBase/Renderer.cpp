@@ -59,6 +59,12 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	glGenBuffers(1, &m_VBOTri);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOTri);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(rect), rect, GL_STATIC_DRAW);
+
+
+	float3 rect2[] = { float3(0.f, 0.f, 0.f), float3(-1.f, 0.f, 0.f), float3(-1.f, 1.f, 0.f) };
+	glGenBuffers(1, &m_VBOTri2);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOTri2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(rect2), rect2, GL_STATIC_DRAW);
 }
 
 void Renderer::CreateVertexBufferObjects()
@@ -308,15 +314,30 @@ void Renderer::Test()
 {
 	glUseProgram(m_SolidRectShader);
 
-	int attribPosition = glGetAttribLocation(m_SolidRectShader, "a_Position");
-	glEnableVertexAttribArray(attribPosition);
-	glBindBuffer(GL_ARRAY_BUFFER, m_VBORect);
+	GLint triLocation = glGetAttribLocation(m_SolidRectShader, "a_Position");
+	glEnableVertexAttribArray(triLocation); // (Location, 다렉에 register set이랑 비슷);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOTri);
+	glVertexAttribPointer(triLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	
+	GLint triLocation2 = glGetAttribLocation(m_SolidRectShader, "a_Position1");
+	glEnableVertexAttribArray(triLocation2);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOTri2);
+	glVertexAttribPointer(triLocation2, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-	//
-	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(float3), 0);
+	static float gScale = 0.f;
+
+	GLint scaleUniform = glGetUniformLocation(m_SolidRectShader, "scale");
+	glUniform1f(scaleUniform, gScale);
 
 	// (Primitive Type, firstIndex, VertexCount)
-	glDrawArrays(GL_TRIANGLES, 0, VERTICES_SQUARE);
-	
-	glDisableVertexAttribArray(attribPosition);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	gScale += 0.01f;
+
+	if (gScale > 1.f)
+	{
+		gScale = 0.f;
+	}
+	glDisableVertexAttribArray(triLocation);
+	glDisableVertexAttribArray(triLocation2);
 }
