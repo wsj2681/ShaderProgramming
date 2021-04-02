@@ -65,6 +65,9 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	glGenBuffers(1, &m_VBOTri2);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOTri2);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(rect2), rect2, GL_STATIC_DRAW);
+
+	//Particle
+	CreateParticle(10000);
 }
 
 void Renderer::CreateVertexBufferObjects()
@@ -83,6 +86,124 @@ void Renderer::CreateVertexBufferObjects()
 	//glBindBuffer(GL_ARRAY_BUFFER, m_VBORect);
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(rect2), rect, GL_STATIC_DRAW);
 
+}
+
+void Renderer::CreateParticle(int count)
+{
+	int floatCount = count * (3/*vertexPosition*/ + 3/*vertexSpeed*/) * 3 * 2;
+	float* particleVertices = new float[floatCount];
+	int vertexCount = count * 3 * 2;
+
+	int index = 0;
+	float particleSize = 0.01f;
+
+	for (int i = 0; i < count; ++i)
+	{
+		float randomValueX = 0.f;
+		float randomValueY = 0.f;
+		float randomValueZ = 0.f;
+
+		randomValueX = (rand() / (float)RAND_MAX - 0.5f) * 2.f;
+		randomValueY = (rand() / (float)RAND_MAX - 0.5f) * 2.f;
+		randomValueZ;
+
+		//v0	position
+		particleVertices[index] = -particleSize / 2.f + randomValueX;
+		index++;
+		particleVertices[index] = -particleSize / 2.f + randomValueY;
+		index++;
+		particleVertices[index] = 0.f;
+		index++;
+
+		//v0	speed;
+		particleVertices[index] = randomValueX;
+		index++;
+		particleVertices[index] = randomValueY;
+		index++;
+		particleVertices[index] = 0.f;
+		index++;
+
+		//v1
+		particleVertices[index] = -particleSize / 2.f + randomValueX;
+		index++;
+		particleVertices[index] = -particleSize / 2.f + randomValueY;
+		index++;
+		particleVertices[index] = 0.f;
+		index++;
+
+		particleVertices[index] = randomValueX;
+		index++;
+		particleVertices[index] = randomValueY;
+		index++;
+		particleVertices[index] = 0.f;
+		index++;
+
+		//v2
+		particleVertices[index] = particleSize / 2.f + randomValueX;
+		index++;
+		particleVertices[index] = particleSize / 2.f + randomValueY;
+		index++;
+		particleVertices[index] = 0.f;
+		index++;
+
+		particleVertices[index] = randomValueX;
+		index++;
+		particleVertices[index] = randomValueY;
+		index++;
+		particleVertices[index] = 0.f;
+		index++;
+
+		//v3
+		particleVertices[index] = particleSize / 2.f + randomValueX;
+		index++;
+		particleVertices[index] = -particleSize / 2.f + randomValueY;
+		index++;
+		particleVertices[index] = 0.f;
+		index++;
+
+		particleVertices[index] = randomValueX;
+		index++;
+		particleVertices[index] = randomValueY;
+		index++;
+		particleVertices[index] = 0.f;
+		index++;
+
+		//v4
+		particleVertices[index] = particleSize / 2.f + randomValueX;
+		index++;
+		particleVertices[index] = particleSize / 2.f + randomValueY;
+		index++;
+		particleVertices[index] = 0.f;
+		index++;
+
+		particleVertices[index] = randomValueX;
+		index++;
+		particleVertices[index] = randomValueY;
+		index++;
+		particleVertices[index] = 0.f;
+		index++;
+
+		//v5
+		particleVertices[index] = -particleSize / 2.f + randomValueX;
+		index++;
+		particleVertices[index] = particleSize / 2.f + randomValueY;
+		index++;
+		particleVertices[index] = 0.f;
+		index++;
+
+		particleVertices[index] = randomValueX;
+		index++;
+		particleVertices[index] = randomValueY;
+		index++;
+		particleVertices[index] = 0.f;
+		index++;
+
+	}
+
+	glGenBuffers(1, &m_VBOManyParticle);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOManyParticle);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * floatCount, particleVertices, GL_STATIC_DRAW);
+	m_VBOManyParticleCount = vertexCount;
 }
 
 void Renderer::AddShader(GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType)
@@ -325,12 +446,18 @@ void Renderer::Test()
 	glVertexAttribPointer(triLocation2, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 	static float gScale = 0.f;
-
+	
 	GLint scaleUniform = glGetUniformLocation(m_SolidRectShader, "scale");
 	glUniform1f(scaleUniform, gScale);
 
+	GLint colorUniform = glGetUniformLocation(m_SolidRectShader, "color");
+	glUniform4f(colorUniform, gScale, 1, 1, 1);
+
+	GLint positionUniform = glGetUniformLocation(m_SolidRectShader, "position");
+	glUniform3f(positionUniform, gScale, gScale, 0);
+
 	// (Primitive Type, firstIndex, VertexCount)
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 
 	gScale += 0.01f;
 
@@ -340,4 +467,21 @@ void Renderer::Test()
 	}
 	glDisableVertexAttribArray(triLocation);
 	glDisableVertexAttribArray(triLocation2);
+}
+
+void Renderer::Particle()
+{
+	GLuint shader = m_SolidRectShader;
+	glUseProgram(shader); // ShaderProgram;
+
+
+	GLint VBOLocation = glGetAttribLocation(m_SolidRectShader, "a_Position");
+	glEnableVertexAttribArray(VBOLocation);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOManyParticle);
+	glVertexAttribPointer(VBOLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glDrawArrays(GL_TRIANGLES, 0, m_VBOManyParticleCount);
+
+
+
 }
