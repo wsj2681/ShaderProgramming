@@ -1,16 +1,31 @@
 #version 450
 
-//in vec3 a_Position; //사용자 입력값
-
 in vec3 a_Position;		//float3 1개
-//in vec3 a_Position1;	//float3 1개, 총 2개 float3 2개
+in vec3 a_Valocity;
+in float a_EmitTime;
+in float a_LifeTime;
 
-//uniform float scale;	//상수버퍼 개념인가
-//uniform vec3 position;
+uniform float u_time;
+const vec3 c_Gravity = vec3(0, -2.8, 0);
 
 void main()
 {
-	//vec3 temp = a_Position;
-	//temp = temp + position;
-	gl_Position = vec4(a_Position, 1); // OpenGL 고유의 출력값
+	float newTime = u_time - a_EmitTime;
+	newTime = mod(newTime, a_LifeTime);
+
+	vec3 newPosition = a_Position;
+
+	if(newTime < 0.0)
+	{
+		newPosition = vec3(10000, 10000, 10000);
+	}
+	else
+	{
+		float t = newTime;
+		float tt = newTime * newTime;
+
+		newPosition = newPosition + (a_Valocity + 0.5 * c_Gravity * tt);
+	}
+
+	gl_Position = vec4(newPosition, 1); // OpenGL 고유의 출력값
 }
