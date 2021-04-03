@@ -1,18 +1,21 @@
 #version 450
 
-in vec3 a_Position;		//float3 1개
+in vec3 a_Position;	
 in vec3 a_Valocity;
 in float a_EmitTime;
 in float a_LifeTime;
 in float a_Period;
 in float a_Amp;
 in float a_RandValue;
+in vec3 a_Color;
 
 uniform float u_time;
 uniform vec3 u_ExForce;
 
 const vec3 c_Gravity = vec3(0, -1.8, 0);
 const mat3 c_NV = mat3(0, -1, 0, 1, 0, 0, 0, 0, 0);
+
+out vec3 outColor;
 
 void main()
 {
@@ -23,7 +26,7 @@ void main()
 	vec3 newPosition;
 	newPosition.x = a_Position.x + cos(a_RandValue * 2 * 3.14);
 	newPosition.y = a_Position.y + sin(a_RandValue * 2 * 3.14);
-	
+	newPosition.z = 0;
 	// Heart Shape
 	//newPosition.x = a_Position.x + (16 * pow(sin(a_RandValue* 2 * 3.14), 3)) * 0.03;
 	//newPosition.y = a_Position.y + (13 * cos(a_RandValue* 2 * 3.14) - 5 * cos(2 * a_RandValue* 2 * 3.14) 
@@ -34,8 +37,8 @@ void main()
 	newPosition.y = a_Position.y + (2 * sin(3 * a_RandValue* 2 * 3.14) - 5 * sin(2 * a_RandValue* 2 * 3.14)) * 0.1;
 
 	// Butterfly Shape
-	newPosition.x = a_Position.x + 0.2 * (cos(a_RandValue* 2 * 3.14) * (exp(cos(a_RandValue* 2 * 3.14)) - 2 * cos(4 * a_RandValue* 2 * 3.14) - pow(sin((a_RandValue * 2 * 3.14) / 12), 5)));
-	newPosition.y = a_Position.y + 0.2 * (sin(a_RandValue* 2 * 3.14) * (exp(cos(a_RandValue* 2 * 3.14)) - 2 * cos(4 * a_RandValue* 2 * 3.14) - pow(sin((a_RandValue * 2 * 3.14) / 12), 5)));
+	newPosition.x = a_Position.x + 0.3 * (cos(a_RandValue* 2 * 3.14) * (exp(cos(a_RandValue* 2 * 3.14)) - 2 * cos(4 * a_RandValue* 2 * 3.14) - pow(sin((a_RandValue * 2 * 3.14) / 12), 5)));
+	newPosition.y = a_Position.y + 0.3 * (sin(a_RandValue* 2 * 3.14) * (exp(cos(a_RandValue* 2 * 3.14)) - 2 * cos(4 * a_RandValue* 2 * 3.14) - pow(sin((a_RandValue * 2 * 3.14) / 12), 5)));
 	newPosition = newPosition * c_NV;
 
 	if(newTime < 0.0)
@@ -59,4 +62,5 @@ void main()
 	}
 
 	gl_Position = vec4(newPosition, 1); // OpenGL 고유의 출력값
+	outColor = a_Color;
 }

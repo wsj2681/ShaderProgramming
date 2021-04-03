@@ -1,7 +1,7 @@
 #version 450
 
 layout(location=0) out vec4 FragColor;
-
+in vec3 outColor;
 //uniform vec4 color;
 
 void main()
@@ -10,7 +10,7 @@ void main()
 	FragColor = vec4(1, 0.078, 0.576, 1);
 	
 	//Yellow Color
-	FragColor = vec4(0, 1, 0, 1);
+	FragColor = vec4(outColor, 0.5);
 
 	//FragColor = color;
 }
