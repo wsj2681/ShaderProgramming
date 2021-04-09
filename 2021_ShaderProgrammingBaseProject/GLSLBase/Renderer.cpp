@@ -103,24 +103,12 @@ void Renderer::CreateParticle(int count)
 
 	for (int i = 0; i < count; ++i)
 	{
-		float randomValueX = 0.f;
-		float randomValueY = 0.f;
-		float randomValueZ = 0.f;
-
-		float randomValueVX = 1.f;
-		float randomValueVY = 0.f;
-		float randomValueVZ = 0.f;
-
-		float randomEmitTime = 0.f;
-		float randomLifeTime = 2.f;
-		float randomPeriod = 1.f;
-		float randomAmp = 1.f;
+		float randomValueX = 0.f, randomValueY = 0.f, randomValueZ = 0.f;
+		float randomValueVX = 1.f, randomValueVY = 0.f, randomValueVZ = 0.f;
+		float randomEmitTime = 0.f, randomLifeTime = 2.f;
+		float randomPeriod = 1.f, randomAmp = 1.f;	
 		float randomValue = 0.f;
-
-		float randomRed = 0.f;
-		float randomGreen = 0.f;
-		float randomBlue = 0.f;
-		float randomAlpha = 0.f;
+		float randomRed = 0.f, randomGreen = 0.f, randomBlue = 0.f, randomAlpha = 0.f;
 
 		//randomValueX = ((float)rand() / (float)RAND_MAX - 0.5f) * 2.f;
 		//randomValueY = ((float)rand() / (float)RAND_MAX - 0.5f) * 2.f;
@@ -131,7 +119,7 @@ void Renderer::CreateParticle(int count)
 		randomValueVZ = 0.f;
 		
 		randomEmitTime = ((float)rand() / (float)RAND_MAX) * 10.f;
-		randomLifeTime = ((float)rand() / (float)RAND_MAX) * 1.f;
+		randomLifeTime = ((float)rand() / (float)RAND_MAX) * 2.f;
 		randomPeriod = ((float)rand() / (float)RAND_MAX) * 10.f + 1.f;
 		randomAmp = ((float)rand() / (float)RAND_MAX) * 0.02f - 0.01f;
 
@@ -141,6 +129,7 @@ void Renderer::CreateParticle(int count)
 		randomGreen = ((float)rand() / (float)RAND_MAX);
 		randomBlue = ((float)rand() / (float)RAND_MAX);
 		randomAlpha = ((float)rand() / (float)RAND_MAX);
+
 		//v0	position
 		particleVertices[index] = -particleSize / 2.f + randomValueX;
 		index++;

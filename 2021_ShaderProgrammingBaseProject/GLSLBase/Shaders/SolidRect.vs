@@ -27,6 +27,7 @@ void main()
 	newPosition.x = a_Position.x + cos(a_RandValue * 2 * 3.14);
 	newPosition.y = a_Position.y + sin(a_RandValue * 2 * 3.14);
 	newPosition.z = 0;
+
 	// Heart Shape
 	//newPosition.x = a_Position.x + (16 * pow(sin(a_RandValue* 2 * 3.14), 3)) * 0.03;
 	//newPosition.y = a_Position.y + (13 * cos(a_RandValue* 2 * 3.14) - 5 * cos(2 * a_RandValue* 2 * 3.14) 
@@ -55,14 +56,24 @@ void main()
 		//newPosition.y = newPosition.y + (a_Amp * newTime) * sin(newTime * 3.14 * 2 * a_Period);
 
 		newTime = mod(newTime, a_LifeTime);
-		float t = newTime;
-		float tt = newTime * newTime;
+
+		// newTime^2
+		float powTime = newTime * newTime;
+		
 		vec3 newAcc = c_Gravity + u_ExForce;
-		vec3 currVel = a_Valocity + t * newAcc;
+		
+		// Current speed over time
+		vec3 currVel = a_Valocity + newTime * newAcc;
+
+		// Normalize
 		vec3 normalV = normalize(currVel * c_NV);
-		newPosition = newPosition + t * a_Valocity + 0.5 * newAcc * tt;
+
+		// 
+		newPosition = newPosition + (newTime * a_Valocity) + 0.5 * newAcc * powTime;
 		newPosition = newPosition + normalV * a_Amp * sin(newTime * 3.14 * 2 * a_Period);
-		float intensity = 1.0 - t / a_LifeTime;
+		//float intensity = 1 - newTime/a_LifeTime;
+		float intensity = abs(sin(newTime* 2 * 3.14));
+
 		Color = a_Color * intensity;
 	}
 
