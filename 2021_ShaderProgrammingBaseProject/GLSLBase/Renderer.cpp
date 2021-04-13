@@ -26,7 +26,8 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 
 	//Load shaders
 	m_SolidRectShader = CompileShaders("./Shaders/SolidRect.vs", "./Shaders/SolidRect.fs");
-	
+	m_FSSandBoxShader = CompileShaders("./Shaders/FSSandBox.vs", "./Shaders/FSSandBox.fs");
+
 	//Create VBOs
 	CreateVertexBufferObjects();
 
@@ -66,10 +67,11 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOTri2);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(rect2), rect2, GL_STATIC_DRAW);
 
+	float rectSize = 1.f;
 	float3 rect3[] = 
 	{ 
-		float3(-1.f, -1.f, 0.f), float3(-1.f, 1.f, 0.f), float3(1.f, 1.f, 0.f),
-		float3(-1.f, -1.f, 0.f), float3(1.f, 1.f, 0.f), float3(1.f, -1.f, 0.f) 
+		float3(-rectSize, -rectSize, 0.f), float3(-rectSize, rectSize, 0.f), float3(rectSize, rectSize, 0.f),
+		float3(-rectSize, -rectSize, 0.f), float3(rectSize, rectSize, 0.f), float3(rectSize, -rectSize, 0.f)
 	};
 
 	glGenBuffers(1, &m_VBOFSSandBox);
@@ -700,7 +702,24 @@ void Renderer::Particle()
 
 void Renderer::FSSandBox()
 {
-	GLuint shader = m_SolidRectShader;
+	GLuint shader = m_FSSandBoxShader;
 	glUseProgram(shader); // ShaderProgram;
 
+	GLuint attribPosLoc = glGetAttribLocation(shader, "a_Position");
+	glEnableVertexAttribArray(attribPosLoc);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOFSSandBox);
+	glVertexAttribPointer(attribPosLoc, 3, GL_FLOAT, GL_FALSE, sizeof(float3) * 1, (GLvoid*)(0));
+
+	GLint resolution = glGetUniformLocation(m_FSSandBoxShader, "iResolution");
+	glUniform2f(resolution, 500, 500);
+
+	GLint time = glGetUniformLocation(m_FSSandBoxShader, "time");
+	glUniform1f(time, g_time);
+
+	GLint mouse = glGetUniformLocation(m_FSSandBoxShader, "mouse");
+	glUniform2f(mouse, g_time, g_time);
+
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	g_time = g_time + 0.016;
 }
