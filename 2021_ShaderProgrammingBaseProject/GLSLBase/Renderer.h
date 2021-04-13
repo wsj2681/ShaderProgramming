@@ -25,6 +25,7 @@ public:
 	   
 	void Test();
 	void Particle();
+	void FSSandBox();
 
 private:
 	void Initialize(int windowSizeX, int windowSizeY);
@@ -61,5 +62,7 @@ private:
 
 	GLuint m_VBOManyParticle = 0;
 	GLuint m_VBOManyParticleCount = 0;
+
+	GLuint m_VBOFSSandBox = 0;
 };
 

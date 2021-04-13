@@ -66,6 +66,16 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOTri2);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(rect2), rect2, GL_STATIC_DRAW);
 
+	float3 rect3[] = 
+	{ 
+		float3(-1.f, -1.f, 0.f), float3(-1.f, 1.f, 0.f), float3(1.f, 1.f, 0.f),
+		float3(-1.f, -1.f, 0.f), float3(1.f, 1.f, 0.f), float3(1.f, -1.f, 0.f) 
+	};
+
+	glGenBuffers(1, &m_VBOFSSandBox);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOFSSandBox);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(rect3), rect3, GL_STATIC_DRAW);
+
 	//Particle
 	CreateParticle(10000);
 }
@@ -685,5 +695,12 @@ void Renderer::Particle()
 	glDrawArrays(GL_TRIANGLES, 0, m_VBOManyParticleCount);
 
 	g_time = g_time + 0.016;
+
+}
+
+void Renderer::FSSandBox()
+{
+	GLuint shader = m_SolidRectShader;
+	glUseProgram(shader); // ShaderProgram;
 
 }
