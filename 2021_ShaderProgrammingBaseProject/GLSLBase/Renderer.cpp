@@ -719,6 +719,26 @@ void Renderer::FSSandBox()
 	GLint mouse = glGetUniformLocation(m_FSSandBoxShader, "mouse");
 	glUniform2f(mouse, g_time, g_time);
 
+	GLint point = glGetUniformLocation(m_FSSandBoxShader, "u_Point");
+	glUniform3f(point, 0.5f, 0.5, 0.1f);
+
+	float pointArray[] =
+	{
+		-0.5f, -0.5f, 0.1f, 
+		-0.4f, -0.4f, 0.1f,
+		-0.3f, -0.3f, 0.1f,
+		-0.2f, -0.2f, 0.1f,
+		-0.1f, -0.1f, 0.1f,
+		0.5f, 0.5f, 0.1f,
+		0.4f, 0.4f, 0.1f,
+		0.3f, 0.3f, 0.1f,
+		0.2f, 0.2f, 0.1f,
+		0.1f, 0.1f, 0.1f
+	};
+
+	GLint points = glGetUniformLocation(m_FSSandBoxShader, "u_Points");
+	glUniform3fv(points, 10, pointArray);
+
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
 	g_time = g_time + 0.016;
