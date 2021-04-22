@@ -705,6 +705,9 @@ void Renderer::FSSandBox()
 	GLuint shader = m_FSSandBoxShader;
 	glUseProgram(shader); // ShaderProgram;
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	GLuint attribPosLoc = glGetAttribLocation(shader, "a_Position");
 	glEnableVertexAttribArray(attribPosLoc);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOFSSandBox);
@@ -741,5 +744,7 @@ void Renderer::FSSandBox()
 
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
+	glDisable(GL_BLEND);
 	g_time = g_time + 0.016;
+
 }

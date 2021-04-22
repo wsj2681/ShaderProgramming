@@ -116,7 +116,36 @@ vec4 IndicatePoints()
 	return returnColor;
 }
 
+vec4 Radar()
+{
+	vec4 returnColor = vec4(0);
+	returnColor.a = 0.4;
+	float dis = length(v_Color.rg - vec2(0.f, 0.f));
+
+	float ringRadius = mod(time, 1.f);
+
+	float radarWidth = 0.008;
+	float ringRadiusDistance = length(ringRadius - radarWidth);
+
+	if(dis > ringRadiusDistance && dis < ringRadiusDistance + radarWidth)
+	{
+		returnColor = vec4(0.5f);
+		for(int i=0; i < 10; ++i)
+		{
+			float pDis = length(u_Points[i].xy - v_Color.rg);
+			if(pDis < 0.05f)
+			{
+				pDis = 0.05f - pDis;
+				pDis *= 20.f;
+				returnColor += vec4(pDis);
+			}
+		}
+	}
+	
+	return returnColor;
+}
+
 void main()
 {
-	FragColor = CenteredCircle3();
+	FragColor = Radar();
 }
