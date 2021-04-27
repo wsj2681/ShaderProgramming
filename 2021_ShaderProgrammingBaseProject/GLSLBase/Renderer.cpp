@@ -67,7 +67,7 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOTri2);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(rect2), rect2, GL_STATIC_DRAW);
 
-	float rectSize = 1.f;
+	float rectSize = .5f;
 	float3 rect3[] = 
 	{ 
 		float3(-rectSize, -rectSize, 0.f), float3(-rectSize, rectSize, 0.f), float3(rectSize, rectSize, 0.f),
@@ -700,6 +700,20 @@ void Renderer::Particle()
 
 }
 
+float gPointArray[] =
+{
+	(float)((float)rand() / (float)RAND_MAX) - 0.5f, (float)((float)rand() / (float)RAND_MAX) - 0.5f, 0.1f,
+	(float)((float)rand() / (float)RAND_MAX) - 0.5f, (float)((float)rand() / (float)RAND_MAX) - 0.5f, 0.1f,
+	(float)((float)rand() / (float)RAND_MAX) - 0.5f, (float)((float)rand() / (float)RAND_MAX) - 0.5f, 0.1f,
+	(float)((float)rand() / (float)RAND_MAX) - 0.5f, (float)((float)rand() / (float)RAND_MAX) - 0.5f, 0.1f,
+	(float)((float)rand() / (float)RAND_MAX) - 0.5f, (float)((float)rand() / (float)RAND_MAX) - 0.5f, 0.1f,
+	(float)((float)rand() / (float)RAND_MAX) - 0.5f, (float)((float)rand() / (float)RAND_MAX) - 0.5f, 0.1f,
+	(float)((float)rand() / (float)RAND_MAX) - 0.5f, (float)((float)rand() / (float)RAND_MAX) - 0.5f, 0.1f,
+	(float)((float)rand() / (float)RAND_MAX) - 0.5f, (float)((float)rand() / (float)RAND_MAX) - 0.5f, 0.1f,
+	(float)((float)rand() / (float)RAND_MAX) - 0.5f, (float)((float)rand() / (float)RAND_MAX) - 0.5f, 0.1f,
+	(float)((float)rand() / (float)RAND_MAX) - 0.5f, (float)((float)rand() / (float)RAND_MAX) - 0.5f, 0.1f
+};
+
 void Renderer::FSSandBox()
 {
 	GLuint shader = m_FSSandBoxShader;
@@ -725,22 +739,10 @@ void Renderer::FSSandBox()
 	GLint point = glGetUniformLocation(m_FSSandBoxShader, "u_Point");
 	glUniform3f(point, 0.5f, 0.5, 0.1f);
 
-	float pointArray[] =
-	{
-		-0.5f, -0.5f, 0.1f, 
-		-0.4f, -0.4f, 0.1f,
-		-0.3f, -0.3f, 0.1f,
-		-0.2f, -0.2f, 0.1f,
-		-0.1f, -0.1f, 0.1f,
-		0.5f, 0.5f, 0.1f,
-		0.4f, 0.4f, 0.1f,
-		0.3f, 0.3f, 0.1f,
-		0.2f, 0.2f, 0.1f,
-		0.1f, 0.1f, 0.1f
-	};
+
 
 	GLint points = glGetUniformLocation(m_FSSandBoxShader, "u_Points");
-	glUniform3fv(points, 10, pointArray);
+	glUniform3fv(points, 10, gPointArray);
 
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 

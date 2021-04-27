@@ -145,7 +145,23 @@ vec4 Radar()
 	return returnColor;
 }
 
+vec4 Wave()
+{
+	vec4 returnColor = vec4(0);
+	for(int i=0; i < 10; ++i)
+	{
+		vec2 origin = u_Points[i].xy;
+		vec2 pos = v_Color.rg;
+		float dis = length(origin - pos);
+		float preq = 8;
+		
+		returnColor += 0.5 * vec4(sin(dis * 2 * PI * preq - time));
+	}
+	//returnColor = normalize(returnColor);
+	return returnColor;
+}
+
 void main()
 {
-	FragColor = Radar();
+	FragColor = IndicatePoint();
 }
