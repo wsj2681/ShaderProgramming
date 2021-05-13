@@ -34,6 +34,7 @@ private:
 	GLuint CompileShaders(char* filenameVS, char* filenameFS);
 	void CreateVertexBufferObjects(); 
 	void CreateParticle(int count);
+	void CreateGridGeometry();
 	unsigned char * Renderer::loadBMPRaw(const char * imagepath, unsigned int& outWidth, unsigned int& outHeight);
 
 	bool m_Initialized = false;
@@ -64,5 +65,8 @@ private:
 	GLuint m_VBOManyParticleCount = 0;
 
 	GLuint m_VBOFSSandBox = 0;
+
+	GLuint m_VBO_ProxyGeo = 0;
+	float m_Count_ProxyGeo = 0.f;
 };
 
